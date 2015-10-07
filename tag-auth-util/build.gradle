@@ -1,15 +1,12 @@
 apply plugin: 'java'
-apply plugin: 'application'
 
 repositories {
     jcenter()
 }
 
-mainClassName  = 'com.organization.project.package.mainClassName'
-
 version = '1.0'
 
-task uberjar(type: Jar) {
+task jreJar(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from {configurations.compile.collect {zipTree(it)}} {
         exclude 'META-INF/**'

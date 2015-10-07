@@ -16,4 +16,5 @@ java -jar ../../../build/libs/tag-auth-util-1.0.jar -sign -template iari-self-si
 
 # validate auth document
 echo "validate signed iari authorization"
-java -jar ../../../../tag-auth-validator/build/iarivalidator.jar -d iari-self-signed-authorization.xml -pkgname iari.selfsigned.test -pkgkeystore keys/package-signer.jks -pkgalias package-signer -pkgstorepass secret -v
+#java -jar ../../../../tag-auth-validator/build/iarivalidator.jar -d iari-self-signed-authorization.xml -pkgname iari.selfsigned.test -pkgkeystore keys/package-signer.jks -pkgalias package-signer -pkgstorepass secret -v
+java -jar ../../../../tag-auth-validator/build/libs/tag-auth-validator-jre.jar -d iari-self-signed-authorization.xml -pkgname iari.selfsigned.test -pkgkeystore keys/package-signer.jks -pkgalias package-signer -pkgstorepass secret -v

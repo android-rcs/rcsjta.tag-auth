@@ -1,0 +1,53 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+repositories {
+    jcenter()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    provided 'org.bouncycastle:bcprov-jdk15on:1.52'
+    provided name: 'bouncycastle-kk'
+    provided 'commons-cli:commons-cli:1.2'
+    provided 'commons-logging:commons-logging:1.1.1'
+    compile name: 'xmlsec-contrib-1.5.6'
+    testCompile 'junit:junit:4.12'
+}
+
+task jreJar(type: Jar) {
+    baseName = project.name + '-jre'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude '**/android/**'
+    exclude 'META-INF/**'
+    with jar
+
+    manifest {
+        attributes 'Main-Class': 'com.gsma.iariauth.validator.util.IARIValidatorMain'
+    }
+}
+
+task androidJar(type: Jar) {
+    baseName = project.name + '-android'
+    from {
+        (configurations.runtime - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/**'
+    exclude '**/jre/**'
+    with jar
+}
