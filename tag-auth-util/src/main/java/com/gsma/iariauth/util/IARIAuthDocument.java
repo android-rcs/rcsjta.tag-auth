@@ -35,12 +35,9 @@ public class IARIAuthDocument {
 	public int initAsDefault(AuthType authType) {
 		this.authType = authType;
 		String templatePath = DEFAULT_TEMPLATE_SELF_SIGNED;
-		InputStream is = jarResourceLoader.getResourceAsStream(templatePath);
-		if(is == null && (new File(templatePath)).exists()) {
-			try { is = new FileInputStream(templatePath); } catch (FileNotFoundException e) {}
-		}
+		InputStream is = getClass().getResourceAsStream(templatePath);
 		if(is == null) {
-			error = "Internal error: unable to find template file";
+			error = "Internal error: unable to find template file in jar";
 			return Constants.INTERNAL_ERR;
 		}
 		return read(is);
@@ -49,11 +46,11 @@ public class IARIAuthDocument {
 	public int read(String templatePath) {
 		File templateFile = new File(templatePath);
 		if(!templateFile.exists()) {
-			error = "Unable to find specified template file";
+			error = "Unable to find specified template file: looking in " + templateFile.getAbsolutePath();
 			return Constants.FILE_NOT_FOUND_ERR;
 		}
 		if(!templateFile.isFile()) {
-			error = "Specified template location is not a file";
+			error = "Specified template location is not a file: looking in " + templateFile.getAbsolutePath();
 			return Constants.FILE_NOT_FOUND_ERR;
 		}
 		FileInputStream is = null;
@@ -241,8 +238,7 @@ public class IARIAuthDocument {
 	private Element packageSignerNode;
 
 	private static final DOMImplementationLS impl;
-	private static final ClassLoader jarResourceLoader = IARIAuthDocument.class.getClassLoader();
-	private static final String DEFAULT_TEMPLATE_SELF_SIGNED = "res/default-self-signed-auth.xml";
+	private static final String DEFAULT_TEMPLATE_SELF_SIGNED = "/templates/default-self-signed-auth.xml";
 
 	static {
 		DOMImplementationRegistry registry = null;
